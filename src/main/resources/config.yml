@@ -1,0 +1,9 @@
+# Customs Office configuration file
+
+non-native-animals:
+    #- donkey: 5
+    #- pig: 5
+
+time-between-restock: 3000
+
+max-total-animals: 15
