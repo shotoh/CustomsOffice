@@ -2,7 +2,6 @@ package io.github.shotoh.customsoffice.core;
 
 import io.github.shotoh.customsoffice.CustomsOffice;
 import io.github.shotoh.customsoffice.utils.ItemUtils;
-import net.minecraft.world.item.SpawnEggItem;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;

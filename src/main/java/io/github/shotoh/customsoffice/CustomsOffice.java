@@ -2,6 +2,7 @@ package io.github.shotoh.customsoffice;
 
 import io.github.shotoh.customsoffice.core.CustomsOfficeKeys;
 import io.github.shotoh.customsoffice.core.NonNativeAnimal;
+import io.github.shotoh.customsoffice.core.PurchaseOrder;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -12,6 +13,7 @@ public class CustomsOffice extends JavaPlugin {
     private final MiniMessage miniMessage = MiniMessage.miniMessage();
     private CustomsOfficeKeys customsOfficeKeys = new CustomsOfficeKeys(this);
     private ArrayList<NonNativeAnimal> nonNativeAnimals = new ArrayList<>();
+    private ArrayList<PurchaseOrder> purchaseOrders = new ArrayList<>();
 
     @Override
     public void onEnable() {
