@@ -3,8 +3,10 @@ package io.github.shotoh.customsoffice;
 import io.github.shotoh.customsoffice.core.CustomsOfficeKeys;
 import io.github.shotoh.customsoffice.core.NonNativeAnimal;
 import io.github.shotoh.customsoffice.core.PurchaseOrder;
+import io.github.shotoh.customsoffice.listeners.InventoryListener;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.entity.EntityType;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
@@ -18,6 +20,7 @@ public class CustomsOffice extends JavaPlugin {
     @Override
     public void onEnable() {
         this.saveDefaultConfig();
+        // TODO fix later (data)
         for (String string : this.getConfig().getStringList("non-native-animals")) {
             if (!string.contains(":")) {
                 this.getLogger().warning(string + " is not a valid non-native-animals entry!");
@@ -29,7 +32,7 @@ public class CustomsOffice extends JavaPlugin {
                 EntityType type = EntityType.valueOf(typeString);
                 int maxOfType = Integer.parseInt(integerString);
                 if (nonNativeAnimals.stream().noneMatch(nonNativeAnimal -> nonNativeAnimal.getType() == type)) {
-                    nonNativeAnimals.add(new NonNativeAnimal(type, maxOfType));
+                    nonNativeAnimals.add(new NonNativeAnimal(type, maxOfType, 20));
                 } else {
                     this.getLogger().warning(type + " has already been initialized!");
                 }
@@ -39,6 +42,7 @@ public class CustomsOffice extends JavaPlugin {
                 this.getLogger().warning(typeString + " is not a valid entity type!");
             }
         }
+        registerEvents(new InventoryListener(this));
     }
 
     @Override
@@ -56,5 +60,9 @@ public class CustomsOffice extends JavaPlugin {
 
     public ArrayList<NonNativeAnimal> getNonNativeAnimals() {
         return nonNativeAnimals;
+    }
+
+    private void registerEvents(Listener listener) {
+        this.getServer().getPluginManager().registerEvents(listener, this);
     }
 }

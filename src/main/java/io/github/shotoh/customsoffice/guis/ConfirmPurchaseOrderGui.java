@@ -12,28 +12,22 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
-public class NPCGui extends CustomsOfficeGui {
-    public NPCGui(CustomsOffice plugin, Player player) {
+public class ConfirmPurchaseOrderGui extends CustomsOfficeGui {
+    public ConfirmPurchaseOrderGui(CustomsOffice plugin, Player player) {
         super(plugin, player);
     }
 
     @Override
     public @NotNull Inventory getInventory() {
         MiniMessage mm = plugin.getMiniMessage();
-        Inventory inv = Bukkit.createInventory(this, 54, mm.deserialize("Customs Office"));
-        for (int i = 0; i < 54; i++) {
-            if (i == 20) {
-                inv.setItem(i, ItemUtils.createMenuItem(plugin, null, "Create purchase order", new String[] {
-                    "Create a purchase order to get",
-                    "some non-native animals"
-                }, Material.WRITABLE_BOOK));
-            } else if (i == 24) {
-                inv.setItem(i, ItemUtils.createMenuItem(plugin, null, "Manage your orders", new String[]{
-                    "Manage your current purchase",
-                    "orders"
-                }, Material.HOPPER));
-            } else if (i == 49) {
-                inv.setItem(i, GuiUtils.getGuiClose(plugin));
+        Inventory inv = Bukkit.createInventory(this, 54, mm.deserialize("Confirm Purchase Order"));
+        for (int i = 0; i < 54; i ++) {
+            if (i == 13) {
+                // TODO set map with info and confirm thing
+            } else if (i == 29) {
+                inv.setItem(i, ItemUtils.createMenuItem(plugin, null, "Confirm", null, Material.EMERALD));
+            } else if (i == 33) {
+                inv.setItem(i, ItemUtils.createMenuItem(plugin, null, "<red>Deny", null, Material.REDSTONE));
             } else {
                 inv.setItem(i, GuiUtils.getGuiGlass(plugin));
             }
@@ -43,22 +37,15 @@ public class NPCGui extends CustomsOfficeGui {
 
     @Override
     public void onInventoryClickEvent(InventoryClickEvent event) {
-        if (event.getInventory().getHolder() instanceof NPCGui) {
+        if (event.getInventory().getHolder() instanceof ConfirmPurchaseOrderGui) {
             event.setCancelled(true);
             Inventory inv = event.getClickedInventory();
             Player player = (Player) event.getWhoClicked();
             int slot = event.getSlot();
             if (inv != player.getInventory()) {
-                if (slot == 20) {
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            player.openInventory(new CreatePurchaseOrderGui(plugin, player).getInventory());
-                        }
-                    }.runTaskLater(plugin, 1);
-                } else if (slot == 24) {
-                    // TODO make manage gui and open it
-                } else if (slot == 49) {
+                if (slot == 29) {
+                    // TODO create purchase order
+                } else if (slot == 33) {
                     new BukkitRunnable() {
                         @Override
                         public void run() {

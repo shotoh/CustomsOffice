@@ -4,6 +4,7 @@ import io.github.shotoh.customsoffice.CustomsOffice;
 import io.github.shotoh.customsoffice.core.CustomsOfficeKeys;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -43,5 +44,17 @@ public class ItemUtils {
 
         is.setItemMeta(im);
         return is;
+    }
+
+    public static boolean isItem(CustomsOffice plugin, ItemStack is, String id) {
+        if (is != null && is.getItemMeta() != null) {
+            PersistentDataContainer con = is.getItemMeta().getPersistentDataContainer();
+            NamespacedKey idKey = plugin.getCustomsOfficeKeys().getIdKey();
+            if (con.has(idKey, PersistentDataType.STRING)) {
+                String conKey = con.get(idKey, PersistentDataType.STRING);
+                return conKey != null && conKey.equalsIgnoreCase(id);
+            }
+        }
+        return false;
     }
 }

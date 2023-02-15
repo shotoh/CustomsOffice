@@ -13,11 +13,13 @@ public class NonNativeAnimal {
     private EntityType type;
     private int maxAmount;
     private int remainingQuantity;
+    private double multiplier;
 
-    public NonNativeAnimal(EntityType type, int maxAmount) {
+    public NonNativeAnimal(EntityType type, int maxAmount, double multiplier) {
         this.type = type;
         this.maxAmount = maxAmount;
         this.remainingQuantity = maxAmount;
+        this.multiplier = multiplier;
     }
 
     public EntityType getType() {
@@ -44,8 +46,20 @@ public class NonNativeAnimal {
         this.remainingQuantity = remainingQuantity;
     }
 
+    public double getMultiplier() {
+        return multiplier;
+    }
+
+    public void setMultiplier(double multiplier) {
+        this.multiplier = multiplier;
+    }
+
     public ItemStack getSpawnEgg(CustomsOffice plugin) {
         return ItemUtils.createMenuItem(plugin, null, StringUtils.capitalize(type.toString().toLowerCase(Locale.ROOT)),
             null, Material.valueOf(type + "_SPAWN_EGG"));
+    }
+
+    public double getCost() {
+        return ((double) maxAmount / remainingQuantity) * multiplier;
     }
 }
