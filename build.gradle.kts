@@ -16,9 +16,17 @@ java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 }
 
+repositories {
+    mavenCentral()
+    maven("https://maven.citizensnpcs.co/repo")
+}
+
 dependencies {
     paperweight.paperDevBundle("1.19.3-R0.1-SNAPSHOT")
     // paperweight.devBundle("com.example.paperfork", "1.19.3-R0.1-SNAPSHOT")
+    compileOnly("net.citizensnpcs:citizens-main:2.0.30-SNAPSHOT") {
+        exclude("*", "*")
+    }
 }
 
 tasks {
@@ -56,4 +64,10 @@ bukkit {
     main = "io.github.shotoh.customsoffice.CustomsOffice"
     apiVersion = "1.19"
     authors = listOf("shotoh")
+    commands {
+        register("customs") {
+            description = "Main command for Customs Office"
+        }
+    }
+    depend = listOf("Citizens")
 }

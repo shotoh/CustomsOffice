@@ -1,8 +1,11 @@
 package io.github.shotoh.customsoffice.guis;
 
 import io.github.shotoh.customsoffice.CustomsOffice;
+import io.github.shotoh.customsoffice.core.NonNativeAnimal;
+import io.github.shotoh.customsoffice.core.PurchaseOrder;
 import io.github.shotoh.customsoffice.utils.GuiUtils;
 import io.github.shotoh.customsoffice.utils.ItemUtils;
+import io.github.shotoh.customsoffice.utils.Utils;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -13,8 +16,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 public class ConfirmPurchaseOrderGui extends CustomsOfficeGui {
-    public ConfirmPurchaseOrderGui(CustomsOffice plugin, Player player) {
+    private NonNativeAnimal nonNativeAnimal;
+
+    public ConfirmPurchaseOrderGui(CustomsOffice plugin, Player player, NonNativeAnimal nonNativeAnimal) {
         super(plugin, player);
+        this.nonNativeAnimal = nonNativeAnimal;
     }
 
     @Override
@@ -23,7 +29,11 @@ public class ConfirmPurchaseOrderGui extends CustomsOfficeGui {
         Inventory inv = Bukkit.createInventory(this, 54, mm.deserialize("Confirm Purchase Order"));
         for (int i = 0; i < 54; i ++) {
             if (i == 13) {
-                // TODO set map with info and confirm thing
+                inv.setItem(i, ItemUtils.createMenuItem(plugin, null, "Purchase Information", new String[] {
+                    "Type: " + nonNativeAnimal.getType().toString(),
+                    nonNativeAnimal.getRemainingQuantity() + " left in stock",
+                    "<gold>Cost: " + nonNativeAnimal.getCost()
+                }, Material.MAP));
             } else if (i == 29) {
                 inv.setItem(i, ItemUtils.createMenuItem(plugin, null, "Confirm", null, Material.EMERALD));
             } else if (i == 33) {
@@ -44,12 +54,25 @@ public class ConfirmPurchaseOrderGui extends CustomsOfficeGui {
             int slot = event.getSlot();
             if (inv != player.getInventory()) {
                 if (slot == 29) {
-                    // TODO create purchase order
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            player.closeInventory();
+                            if (nonNativeAnimal.getRemainingQuantity() > 0) {
+                                plugin.getCustomsOfficeData().getPurchaseOrders().add(new PurchaseOrder(player.getUniqueId(), nonNativeAnimal.getType(), nonNativeAnimal.getCost()));
+                                nonNativeAnimal.setRemainingQuantity(nonNativeAnimal.getRemainingQuantity() - 1);
+                                Utils.playSound(player, "entity.player.levelup", 1f, 1f);
+                            } else {
+                                player.sendMessage(plugin.getMiniMessage().deserialize("<red>An error has occurred and the transaction could not be made!"));
+                            }
+                        }
+                    }.runTaskLater(plugin, 1);
                 } else if (slot == 33) {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
                             player.closeInventory();
+                            Utils.playSound(player, "entity.villager.no", 1f, 1f);
                         }
                     }.runTaskLater(plugin, 1);
                 }

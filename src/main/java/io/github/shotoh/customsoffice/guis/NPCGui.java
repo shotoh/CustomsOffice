@@ -3,6 +3,7 @@ package io.github.shotoh.customsoffice.guis;
 import io.github.shotoh.customsoffice.CustomsOffice;
 import io.github.shotoh.customsoffice.utils.GuiUtils;
 import io.github.shotoh.customsoffice.utils.ItemUtils;
+import io.github.shotoh.customsoffice.utils.Utils;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -54,10 +55,17 @@ public class NPCGui extends CustomsOfficeGui {
                         @Override
                         public void run() {
                             player.openInventory(new CreatePurchaseOrderGui(plugin, player).getInventory());
+                            Utils.playSound(player, "item.book.page_turn", 1f, 1f);
                         }
                     }.runTaskLater(plugin, 1);
                 } else if (slot == 24) {
-                    // TODO make manage gui and open it
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            player.openInventory(new ManagePurchaseOrderGui(plugin, player).getInventory());
+                            Utils.playSound(player, "item.spyglass.use", 1f, 2f);
+                        }
+                    }.runTaskLater(plugin, 1);
                 } else if (slot == 49) {
                     new BukkitRunnable() {
                         @Override

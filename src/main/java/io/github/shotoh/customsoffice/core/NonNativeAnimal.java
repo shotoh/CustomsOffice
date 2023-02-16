@@ -12,7 +12,7 @@ import java.util.Locale;
 public class NonNativeAnimal {
     private EntityType type;
     private int maxAmount;
-    private int remainingQuantity;
+    private transient int remainingQuantity;
     private double multiplier;
 
     public NonNativeAnimal(EntityType type, int maxAmount, double multiplier) {
@@ -55,11 +55,21 @@ public class NonNativeAnimal {
     }
 
     public ItemStack getSpawnEgg(CustomsOffice plugin) {
-        return ItemUtils.createMenuItem(plugin, null, StringUtils.capitalize(type.toString().toLowerCase(Locale.ROOT)),
-            null, Material.valueOf(type + "_SPAWN_EGG"));
+        String[] lore;
+        if (remainingQuantity > 0) {
+            lore = new String[] {
+                remainingQuantity + " left in stock",
+                "<gold>Cost: " + getCost()
+            };
+        } else {
+            lore = new String[] {
+                "<red>Out of stock"
+            };
+        }
+        return ItemUtils.createMenuItem(plugin, null, StringUtils.capitalize(type.toString().toLowerCase(Locale.ROOT)), lore, Material.valueOf(type + "_SPAWN_EGG"));
     }
 
-    public double getCost() {
-        return ((double) maxAmount / remainingQuantity) * multiplier;
+    public int getCost() {
+        return (int) (multiplier * maxAmount / remainingQuantity);
     }
 }
