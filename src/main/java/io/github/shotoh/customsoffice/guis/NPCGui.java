@@ -63,7 +63,7 @@ public class NPCGui extends CustomsOfficeGui {
                         @Override
                         public void run() {
                             player.openInventory(new ManagePurchaseOrderGui(plugin, player).getInventory());
-                            Utils.playSound(player, "item.spyglass.use", 1f, 2f);
+                            Utils.playSound(player, "item.bundle.drop_contents", 1f, 1f);
                         }
                     }.runTaskLater(plugin, 1);
                 } else if (slot == 49) {

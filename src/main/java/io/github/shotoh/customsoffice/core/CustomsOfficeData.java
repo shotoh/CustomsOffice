@@ -7,10 +7,12 @@ import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.entity.EntityType;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.UUID;
 
 public class CustomsOfficeData {
     private final CustomsOffice plugin;
@@ -64,46 +66,36 @@ public class CustomsOfficeData {
             FileReader animalReader = new FileReader(getFile("animals.json"));
             ArrayList<NonNativeAnimal> animals = gson.fromJson(animalReader, new TypeToken<ArrayList<NonNativeAnimal>>(){}.getType());
             animalReader.close();
-            if (animals != null) {
+            if (animals == null) {
+                animals = new ArrayList<>();
+            }
 
 
-                animals.add(new NonNativeAnimal(EntityType.DONKEY, 15, 200));
-                //animals.add(new NonNativeAnimal(EntityType.PIG, 5, 400));
+            animals.add(new NonNativeAnimal(EntityType.DONKEY, 15, 200));
+            //animals.add(new NonNativeAnimal(EntityType.PIG, 5, 400));
 
 
-                HashSet<EntityType> typesSet = new HashSet<>();
-                for (NonNativeAnimal nonNativeAnimal : animals) {
-                    if (!typesSet.contains(nonNativeAnimal.getType())) {
-                        typesSet.add(nonNativeAnimal.getType());
-                        for (PurchaseOrder order : purchaseOrders) {
-                            if (order.getType() == nonNativeAnimal.getType()) {
-                                nonNativeAnimal.setRemainingQuantity(nonNativeAnimal.getRemainingQuantity() - 1);
-                            }
+            HashSet<EntityType> typesSet = new HashSet<>();
+            for (NonNativeAnimal nonNativeAnimal : animals) {
+                if (!typesSet.contains(nonNativeAnimal.getType())) {
+                    typesSet.add(nonNativeAnimal.getType());
+                    for (PurchaseOrder order : purchaseOrders) {
+                        // TODO REMOVE IF REMOVING TRANSIENT
+                        if (order.getType() == nonNativeAnimal.getType()) {
+                            nonNativeAnimal.setRemainingQuantity(nonNativeAnimal.getRemainingQuantity() - 1);
                         }
-                        nonNativeAnimals.add(nonNativeAnimal);
                     }
+                    nonNativeAnimals.add(nonNativeAnimal);
                 }
             }
             plugin.getLogger().info(nonNativeAnimals.size() + " non native animals loaded!");
-            // npc
-            String npcUUIDString = plugin.getConfig().getString("npc-uuid");
-            try {
-                if (npcUUIDString != null) {
-                    UUID npcUUID = UUID.fromString(npcUUIDString);
-                    npc = CitizensAPI.getNPCRegistry().getByUniqueId(npcUUID);
-                } else {
-                    throw new IllegalArgumentException();
-                }
-            } catch (IllegalArgumentException e) {
-                plugin.getLogger().severe("An invalid NPC uuid has been found in the config");
-                plugin.getLogger().severe("All NPC interactions pertaining to this plugin will not work");
-            }
         } catch (IOException e) {
             e.printStackTrace();
         }
         // TODO close all guis when event happened
         // TODO load worldguard
         // TODO food person
+        // TODO amounts?
     }
 
     public void save() {

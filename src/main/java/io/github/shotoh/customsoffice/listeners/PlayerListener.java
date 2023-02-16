@@ -18,8 +18,9 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onPlayerInteractEntityEvent(PlayerInteractEntityEvent event) {
         if (CitizensAPI.getNPCRegistry().isNPC(event.getRightClicked())) {
-            NPC npc = CitizensAPI.getNPCRegistry().getNPC(event.getRightClicked());
-            if (npc.getUniqueId().equals(plugin.getCustomsOfficeData().getNpc().getUniqueId())) {
+            NPC clickedNPC = CitizensAPI.getNPCRegistry().getNPC(event.getRightClicked());
+            NPC customsNPC = plugin.getCustomsOfficeData().getNpc();
+            if (clickedNPC != null && customsNPC != null && clickedNPC.getId() == customsNPC.getId()) {
                 event.getPlayer().openInventory(new NPCGui(plugin, event.getPlayer()).getInventory());
             }
         }

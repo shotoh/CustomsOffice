@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import io.github.shotoh.customsoffice.core.CustomsOfficeCommand;
 import io.github.shotoh.customsoffice.core.CustomsOfficeData;
 import io.github.shotoh.customsoffice.core.CustomsOfficeKeys;
+import io.github.shotoh.customsoffice.listeners.CitizensListener;
 import io.github.shotoh.customsoffice.listeners.InventoryListener;
 import io.github.shotoh.customsoffice.listeners.PlayerListener;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -24,6 +25,7 @@ public class CustomsOffice extends JavaPlugin {
         customsOfficeData.load();
         registerEvents(new InventoryListener(this));
         registerEvents(new PlayerListener(this));
+        registerEvents(new CitizensListener(this));
     }
 
     @Override

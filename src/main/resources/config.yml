@@ -1,5 +1,5 @@
 # Customs Office configuration file
 
-npc-uuid: ""
+npc-id: ""
 time-between-restock: 3000
 max-total-animals: 15

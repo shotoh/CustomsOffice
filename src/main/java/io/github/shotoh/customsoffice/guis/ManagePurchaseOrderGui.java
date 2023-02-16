@@ -89,8 +89,14 @@ public class ManagePurchaseOrderGui extends CustomsOfficeGui {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
+                            plugin.getCustomsOfficeData().getPurchaseOrders().remove(order); // TODO fix?
                             list.remove(order);
                             player.openInventory(new ManagePurchaseOrderGui(plugin, player, list, page).getInventory());
+                            for (NonNativeAnimal nonNativeAnimal : plugin.getCustomsOfficeData().getNonNativeAnimals()) {
+                                if (nonNativeAnimal.getType() == order.getType()) {
+                                    nonNativeAnimal.setRemainingQuantity(nonNativeAnimal.getRemainingQuantity() + 1);
+                                }
+                            }
                             Utils.playSound(player, "entity.generic.explode", 1f, 2f);
                         }
                     }.runTaskLater(plugin, 1);
