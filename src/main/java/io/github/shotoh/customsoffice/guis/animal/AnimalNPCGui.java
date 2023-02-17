@@ -1,6 +1,7 @@
-package io.github.shotoh.customsoffice.guis;
+package io.github.shotoh.customsoffice.guis.animal;
 
 import io.github.shotoh.customsoffice.CustomsOffice;
+import io.github.shotoh.customsoffice.guis.CustomsOfficeGui;
 import io.github.shotoh.customsoffice.utils.GuiUtils;
 import io.github.shotoh.customsoffice.utils.ItemUtils;
 import io.github.shotoh.customsoffice.utils.Utils;
@@ -13,8 +14,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
-public class NPCGui extends CustomsOfficeGui {
-    public NPCGui(CustomsOffice plugin, Player player) {
+public class AnimalNPCGui extends CustomsOfficeGui {
+    public AnimalNPCGui(CustomsOffice plugin, Player player) {
         super(plugin, player);
     }
 
@@ -44,7 +45,7 @@ public class NPCGui extends CustomsOfficeGui {
 
     @Override
     public void onInventoryClickEvent(InventoryClickEvent event) {
-        if (event.getInventory().getHolder() instanceof NPCGui) {
+        if (event.getInventory().getHolder() instanceof AnimalNPCGui) {
             event.setCancelled(true);
             Inventory inv = event.getClickedInventory();
             Player player = (Player) event.getWhoClicked();
@@ -54,7 +55,7 @@ public class NPCGui extends CustomsOfficeGui {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            player.openInventory(new CreatePurchaseOrderGui(plugin, player).getInventory());
+                            player.openInventory(new AnimalCreateGui(plugin, player).getInventory());
                             Utils.playSound(player, "item.book.page_turn", 1f, 1f);
                         }
                     }.runTaskLater(plugin, 1);
@@ -62,7 +63,7 @@ public class NPCGui extends CustomsOfficeGui {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            player.openInventory(new ManagePurchaseOrderGui(plugin, player).getInventory());
+                            player.openInventory(new AnimalManageGui(plugin, player).getInventory());
                             Utils.playSound(player, "item.bundle.drop_contents", 1f, 1f);
                         }
                     }.runTaskLater(plugin, 1);

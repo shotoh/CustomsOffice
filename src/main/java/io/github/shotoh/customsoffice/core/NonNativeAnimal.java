@@ -14,12 +14,14 @@ public class NonNativeAnimal {
     private int maxAmount;
     private int remainingQuantity;
     private double multiplier;
+    private String regionID;
 
     public NonNativeAnimal(EntityType type, int maxAmount, int remainingQuantity, double multiplier) {
         this.type = type;
         this.maxAmount = maxAmount;
         this.remainingQuantity = remainingQuantity;
         this.multiplier = multiplier;
+        this.regionID = null;
     }
 
     public EntityType getType() {
@@ -52,6 +54,14 @@ public class NonNativeAnimal {
 
     public void setMultiplier(double multiplier) {
         this.multiplier = multiplier;
+    }
+
+    public String getRegionID() {
+        return regionID;
+    }
+
+    public void setRegionID(String regionID) {
+        this.regionID = regionID;
     }
 
     public ItemStack getSpawnEgg(CustomsOffice plugin) {

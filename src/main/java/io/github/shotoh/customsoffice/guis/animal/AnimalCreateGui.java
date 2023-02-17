@@ -1,7 +1,8 @@
-package io.github.shotoh.customsoffice.guis;
+package io.github.shotoh.customsoffice.guis.animal;
 
 import io.github.shotoh.customsoffice.CustomsOffice;
 import io.github.shotoh.customsoffice.core.NonNativeAnimal;
+import io.github.shotoh.customsoffice.guis.CustomsOfficeGui;
 import io.github.shotoh.customsoffice.utils.GuiUtils;
 import io.github.shotoh.customsoffice.utils.Utils;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -14,19 +15,19 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-public class CreatePurchaseOrderGui extends CustomsOfficeGui {
+public class AnimalCreateGui extends CustomsOfficeGui {
     private ArrayList<NonNativeAnimal> list;
     private int maxPages;
     private int page;
 
-    public CreatePurchaseOrderGui(CustomsOffice plugin, Player player) {
+    public AnimalCreateGui(CustomsOffice plugin, Player player) {
         super(plugin, player);
         this.list = new ArrayList<>(plugin.getCustomsOfficeData().getNonNativeAnimals());
         this.maxPages = list.size() / 28 + 1;
         this.page = 0;
     }
 
-    public CreatePurchaseOrderGui(CustomsOffice plugin, Player player, ArrayList<NonNativeAnimal> list, int page) {
+    public AnimalCreateGui(CustomsOffice plugin, Player player, ArrayList<NonNativeAnimal> list, int page) {
         super(plugin, player);
         this.list = list;
         this.maxPages = list.size() / 28 + 1;
@@ -70,7 +71,7 @@ public class CreatePurchaseOrderGui extends CustomsOfficeGui {
 
     @Override
     public void onInventoryClickEvent(InventoryClickEvent event) {
-        if (event.getInventory().getHolder() instanceof CreatePurchaseOrderGui) {
+        if (event.getInventory().getHolder() instanceof AnimalCreateGui) {
             event.setCancelled(true);
             Inventory inv = event.getClickedInventory();
             Player player = (Player) event.getWhoClicked();
@@ -86,7 +87,7 @@ public class CreatePurchaseOrderGui extends CustomsOfficeGui {
                                 new BukkitRunnable() {
                                     @Override
                                     public void run() {
-                                        player.openInventory(new ConfirmPurchaseOrderGui(plugin, player, nonNativeAnimal).getInventory());
+                                        player.openInventory(new AnimalConfirmGui(plugin, player, nonNativeAnimal).getInventory());
                                         Utils.playSound(player, "block.lever.click", 1f, 1f);
                                     }
                                 }.runTaskLater(plugin, 1);
@@ -100,7 +101,7 @@ public class CreatePurchaseOrderGui extends CustomsOfficeGui {
                         new BukkitRunnable() {
                             @Override
                             public void run() {
-                                player.openInventory(new CreatePurchaseOrderGui(plugin, player, list, page - 1).getInventory());
+                                player.openInventory(new AnimalCreateGui(plugin, player, list, page - 1).getInventory());
                                 Utils.playSound(player, "block.lever.click", 1f, 1f);
                             }
                         }.runTaskLater(plugin, 1);
@@ -117,7 +118,7 @@ public class CreatePurchaseOrderGui extends CustomsOfficeGui {
                         new BukkitRunnable() {
                             @Override
                             public void run() {
-                                player.openInventory(new CreatePurchaseOrderGui(plugin, player, list, page + 1).getInventory());
+                                player.openInventory(new AnimalCreateGui(plugin, player, list, page + 1).getInventory());
                                 Utils.playSound(player, "block.lever.click", 1f, 1f);
                             }
                         }.runTaskLater(plugin, 1);

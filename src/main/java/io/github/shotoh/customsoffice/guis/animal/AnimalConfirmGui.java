@@ -1,8 +1,9 @@
-package io.github.shotoh.customsoffice.guis;
+package io.github.shotoh.customsoffice.guis.animal;
 
 import io.github.shotoh.customsoffice.CustomsOffice;
 import io.github.shotoh.customsoffice.core.NonNativeAnimal;
 import io.github.shotoh.customsoffice.core.PurchaseOrder;
+import io.github.shotoh.customsoffice.guis.CustomsOfficeGui;
 import io.github.shotoh.customsoffice.utils.GuiUtils;
 import io.github.shotoh.customsoffice.utils.ItemUtils;
 import io.github.shotoh.customsoffice.utils.Utils;
@@ -15,10 +16,10 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
-public class ConfirmPurchaseOrderGui extends CustomsOfficeGui {
+public class AnimalConfirmGui extends CustomsOfficeGui {
     private NonNativeAnimal nonNativeAnimal;
 
-    public ConfirmPurchaseOrderGui(CustomsOffice plugin, Player player, NonNativeAnimal nonNativeAnimal) {
+    public AnimalConfirmGui(CustomsOffice plugin, Player player, NonNativeAnimal nonNativeAnimal) {
         super(plugin, player);
         this.nonNativeAnimal = nonNativeAnimal;
     }
@@ -47,7 +48,7 @@ public class ConfirmPurchaseOrderGui extends CustomsOfficeGui {
 
     @Override
     public void onInventoryClickEvent(InventoryClickEvent event) {
-        if (event.getInventory().getHolder() instanceof ConfirmPurchaseOrderGui) {
+        if (event.getInventory().getHolder() instanceof AnimalConfirmGui) {
             event.setCancelled(true);
             Inventory inv = event.getClickedInventory();
             Player player = (Player) event.getWhoClicked();

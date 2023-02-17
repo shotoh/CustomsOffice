@@ -1,8 +1,9 @@
-package io.github.shotoh.customsoffice.guis;
+package io.github.shotoh.customsoffice.guis.animal;
 
 import io.github.shotoh.customsoffice.CustomsOffice;
 import io.github.shotoh.customsoffice.core.NonNativeAnimal;
 import io.github.shotoh.customsoffice.core.PurchaseOrder;
+import io.github.shotoh.customsoffice.guis.CustomsOfficeGui;
 import io.github.shotoh.customsoffice.utils.GuiUtils;
 import io.github.shotoh.customsoffice.utils.Utils;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -15,12 +16,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-public class ManagePurchaseOrderGui extends CustomsOfficeGui {
+public class AnimalManageGui extends CustomsOfficeGui {
     private ArrayList<PurchaseOrder> list;
     private int maxPages;
     private int page;
 
-    public ManagePurchaseOrderGui(CustomsOffice plugin, Player player) {
+    public AnimalManageGui(CustomsOffice plugin, Player player) {
         super(plugin, player);
         this.list = new ArrayList<>();
         for (PurchaseOrder order : plugin.getCustomsOfficeData().getPurchaseOrders()) {
@@ -32,7 +33,7 @@ public class ManagePurchaseOrderGui extends CustomsOfficeGui {
         this.page = 0;
     }
 
-    public ManagePurchaseOrderGui(CustomsOffice plugin, Player player, ArrayList<PurchaseOrder> list, int page) {
+    public AnimalManageGui(CustomsOffice plugin, Player player, ArrayList<PurchaseOrder> list, int page) {
         super(plugin, player);
         this.list = list;
         this.maxPages = list.size() / 28 + 1;
@@ -76,7 +77,7 @@ public class ManagePurchaseOrderGui extends CustomsOfficeGui {
 
     @Override
     public void onInventoryClickEvent(InventoryClickEvent event) {
-        if (event.getInventory().getHolder() instanceof ManagePurchaseOrderGui) {
+        if (event.getInventory().getHolder() instanceof AnimalManageGui) {
             event.setCancelled(true);
             Inventory inv = event.getClickedInventory();
             Player player = (Player) event.getWhoClicked();
@@ -93,7 +94,7 @@ public class ManagePurchaseOrderGui extends CustomsOfficeGui {
                                 public void run() {
                                     plugin.getCustomsOfficeData().getPurchaseOrders().remove(order);
                                     list.remove(order);
-                                    player.openInventory(new ManagePurchaseOrderGui(plugin, player, list, page).getInventory());
+                                    player.openInventory(new AnimalManageGui(plugin, player, list, page).getInventory());
                                     for (NonNativeAnimal nonNativeAnimal : plugin.getCustomsOfficeData().getNonNativeAnimals()) {
                                         if (nonNativeAnimal.getType() == order.getType()) {
                                             nonNativeAnimal.setRemainingQuantity(nonNativeAnimal.getRemainingQuantity() + 1);
@@ -109,7 +110,7 @@ public class ManagePurchaseOrderGui extends CustomsOfficeGui {
                         new BukkitRunnable() {
                             @Override
                             public void run() {
-                                player.openInventory(new ManagePurchaseOrderGui(plugin, player, list, page - 1).getInventory());
+                                player.openInventory(new AnimalManageGui(plugin, player, list, page - 1).getInventory());
                                 Utils.playSound(player, "block.lever.click", 1f, 1f);
                             }
                         }.runTaskLater(plugin, 1);
@@ -126,7 +127,7 @@ public class ManagePurchaseOrderGui extends CustomsOfficeGui {
                         new BukkitRunnable() {
                             @Override
                             public void run() {
-                                player.openInventory(new ManagePurchaseOrderGui(plugin, player, list, page + 1).getInventory());
+                                player.openInventory(new AnimalManageGui(plugin, player, list, page + 1).getInventory());
                                 Utils.playSound(player, "block.lever.click", 1f, 1f);
                             }
                         }.runTaskLater(plugin, 1);

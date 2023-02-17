@@ -1,7 +1,7 @@
 package io.github.shotoh.customsoffice.core;
 
 import io.github.shotoh.customsoffice.CustomsOffice;
-import io.github.shotoh.customsoffice.guis.NPCGui;
+import io.github.shotoh.customsoffice.guis.animal.AnimalNPCGui;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -19,7 +19,7 @@ public class CustomsOfficeCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         Player player = ((Player) sender);
         if (args[0].equals("test1")) {
-            player.openInventory(new NPCGui(plugin, player).getInventory());
+            player.openInventory(new AnimalNPCGui(plugin, player).getInventory());
         }
         return true;
     }

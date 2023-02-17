@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.sk89q.worldedit.world.World;
 import com.sk89q.worldguard.WorldGuard;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import io.github.shotoh.customsoffice.CustomsOffice;
-import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
@@ -15,19 +15,22 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class CustomsOfficeData {
     private final CustomsOffice plugin;
     private ArrayList<NonNativeAnimal> nonNativeAnimals;
     private ArrayList<PurchaseOrder> purchaseOrders;
-    private NPC npc;
+    private NPC animalNPC;
+    private HashMap<ProtectedRegion, EntityType> regionHashMap;
 
     public CustomsOfficeData(CustomsOffice plugin) {
         this.plugin = plugin;
         this.nonNativeAnimals = new ArrayList<>();
         this.purchaseOrders = new ArrayList<>();
-        this.npc = null;
+        this.animalNPC = null;
+        this.regionHashMap = new HashMap<>();
     }
 
     public ArrayList<NonNativeAnimal> getNonNativeAnimals() {
@@ -46,12 +49,20 @@ public class CustomsOfficeData {
         this.purchaseOrders = purchaseOrders;
     }
 
-    public NPC getNpc() {
-        return npc;
+    public NPC getAnimalNPC() {
+        return animalNPC;
     }
 
-    public void setNpc(NPC npc) {
-        this.npc = npc;
+    public void setAnimalNPC(NPC animalNPC) {
+        this.animalNPC = animalNPC;
+    }
+
+    public HashMap<ProtectedRegion, EntityType> getRegionHashMap() {
+        return regionHashMap;
+    }
+
+    public void setRegionHashMap(HashMap<ProtectedRegion, EntityType> regionHashMap) {
+        this.regionHashMap = regionHashMap;
     }
 
     public void load() {
@@ -92,10 +103,10 @@ public class CustomsOfficeData {
             e.printStackTrace();
         }
         // TODO close all guis when event happened
-        // TODO load worldguard
         // TODO food person
         // TODO amounts?
         // TODO hook into vault
+        // commands
     }
 
     public void save() {
