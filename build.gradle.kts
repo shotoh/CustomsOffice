@@ -19,6 +19,7 @@ java {
 repositories {
     mavenCentral()
     maven("https://maven.citizensnpcs.co/repo")
+    maven("https://maven.enginehub.org/repo")
 }
 
 dependencies {
@@ -27,6 +28,7 @@ dependencies {
     compileOnly("net.citizensnpcs:citizens-main:2.0.30-SNAPSHOT") {
         exclude("*", "*")
     }
+    compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.8-SNAPSHOT")
 }
 
 tasks {
@@ -69,5 +71,5 @@ bukkit {
             description = "Main command for Customs Office"
         }
     }
-    depend = listOf("Citizens")
+    depend = listOf("Citizens", "WorldGuard")
 }

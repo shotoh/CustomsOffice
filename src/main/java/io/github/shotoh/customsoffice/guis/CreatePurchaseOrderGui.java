@@ -77,18 +77,23 @@ public class CreatePurchaseOrderGui extends CustomsOfficeGui {
             int slot = event.getSlot();
             if (inv != player.getInventory()) {
                 if (GuiUtils.notBorder(slot)) {
-                    int index = GuiUtils.convertSlotToIndex(slot) * (page + 1);
-                    NonNativeAnimal nonNativeAnimal = list.get(index);
-                    if (nonNativeAnimal.getRemainingQuantity() > 0) {
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                player.openInventory(new ConfirmPurchaseOrderGui(plugin, player, nonNativeAnimal).getInventory());
-                                Utils.playSound(player, "block.lever.click", 1f, 1f);
+                    int index = GuiUtils.convertSlotToIndex(slot);
+                    if (index >= 0 && index < 28) {
+                        index += page * 28;
+                        if (index < list.size()) {
+                            NonNativeAnimal nonNativeAnimal = list.get(index);
+                            if (nonNativeAnimal.getRemainingQuantity() > 0) {
+                                new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        player.openInventory(new ConfirmPurchaseOrderGui(plugin, player, nonNativeAnimal).getInventory());
+                                        Utils.playSound(player, "block.lever.click", 1f, 1f);
+                                    }
+                                }.runTaskLater(plugin, 1);
+                            } else {
+                                Utils.playSound(player, "entity.villager.no", 1f, 1f);
                             }
-                        }.runTaskLater(plugin, 1);
-                    } else {
-                        Utils.playSound(player, "entity.villager.no", 1f, 1f);
+                        }
                     }
                 } else if (slot == 48) {
                     if (maxPages > 1 && page > 0) {

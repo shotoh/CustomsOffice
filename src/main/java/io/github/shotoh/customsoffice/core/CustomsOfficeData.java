@@ -2,9 +2,12 @@ package io.github.shotoh.customsoffice.core;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.sk89q.worldedit.world.World;
+import com.sk89q.worldguard.WorldGuard;
 import io.github.shotoh.customsoffice.CustomsOffice;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
 
 import java.io.File;
@@ -83,6 +86,8 @@ public class CustomsOfficeData {
                 }
             }
             plugin.getLogger().info(nonNativeAnimals.size() + " non native animals loaded!");
+            //
+            WorldGuard.getInstance().getPlatform().getRegionContainer().get((World) Bukkit.getWorlds().get(0));
         } catch (IOException e) {
             e.printStackTrace();
         }

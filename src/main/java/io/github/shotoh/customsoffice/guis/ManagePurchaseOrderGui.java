@@ -44,15 +44,14 @@ public class ManagePurchaseOrderGui extends CustomsOfficeGui {
     }
 
     @Override
-    public @NotNull
-    Inventory getInventory() {
+    public @NotNull Inventory getInventory() {
         MiniMessage mm = plugin.getMiniMessage();
         Inventory inv = Bukkit.createInventory(this, 54, mm.deserialize("Manage Purchase Orders"));
         for (int i = 0; i < 54; i++) {
             if (GuiUtils.notBorder(i)) {
                 int index = GuiUtils.convertSlotToIndex(i);
                 if (index + (page * 28) < list.size()) {
-                    inv.setItem(i, list.get(index).getOrderDetails(plugin));
+                    inv.setItem(i, list.get(index + (page * 28)).getOrderDetails(plugin));
                 }
             } else if (i == 48) {
                 if (maxPages > 1 && page > 0) {
@@ -84,22 +83,27 @@ public class ManagePurchaseOrderGui extends CustomsOfficeGui {
             int slot = event.getSlot();
             if (inv != player.getInventory()) {
                 if (GuiUtils.notBorder(slot)) {
-                    int index = GuiUtils.convertSlotToIndex(slot) * (page + 1);
-                    PurchaseOrder order = list.get(index);
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            plugin.getCustomsOfficeData().getPurchaseOrders().remove(order);
-                            list.remove(order);
-                            player.openInventory(new ManagePurchaseOrderGui(plugin, player, list, page).getInventory());
-                            for (NonNativeAnimal nonNativeAnimal : plugin.getCustomsOfficeData().getNonNativeAnimals()) {
-                                if (nonNativeAnimal.getType() == order.getType()) {
-                                    nonNativeAnimal.setRemainingQuantity(nonNativeAnimal.getRemainingQuantity() + 1);
+                    int index = GuiUtils.convertSlotToIndex(slot);
+                    if (index >= 0 && index < 28) {
+                        index += page * 28;
+                        if (index < list.size()) {
+                            PurchaseOrder order = list.get(index);
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    plugin.getCustomsOfficeData().getPurchaseOrders().remove(order);
+                                    list.remove(order);
+                                    player.openInventory(new ManagePurchaseOrderGui(plugin, player, list, page).getInventory());
+                                    for (NonNativeAnimal nonNativeAnimal : plugin.getCustomsOfficeData().getNonNativeAnimals()) {
+                                        if (nonNativeAnimal.getType() == order.getType()) {
+                                            nonNativeAnimal.setRemainingQuantity(nonNativeAnimal.getRemainingQuantity() + 1);
+                                        }
+                                    }
+                                    Utils.playSound(player, "entity.generic.explode", 1f, 2f);
                                 }
-                            }
-                            Utils.playSound(player, "entity.generic.explode", 1f, 2f);
+                            }.runTaskLater(plugin, 1);
                         }
-                    }.runTaskLater(plugin, 1);
+                    }
                 } else if (slot == 48) {
                     if (maxPages > 1 && page > 0) {
                         new BukkitRunnable() {
