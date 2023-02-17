@@ -12,13 +12,13 @@ import java.util.Locale;
 public class NonNativeAnimal {
     private EntityType type;
     private int maxAmount;
-    private transient int remainingQuantity;
+    private int remainingQuantity;
     private double multiplier;
 
-    public NonNativeAnimal(EntityType type, int maxAmount, double multiplier) {
+    public NonNativeAnimal(EntityType type, int maxAmount, int remainingQuantity, double multiplier) {
         this.type = type;
         this.maxAmount = maxAmount;
-        this.remainingQuantity = maxAmount;
+        this.remainingQuantity = remainingQuantity;
         this.multiplier = multiplier;
     }
 

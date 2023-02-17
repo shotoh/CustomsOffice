@@ -71,7 +71,7 @@ public class CustomsOfficeData {
             }
 
 
-            animals.add(new NonNativeAnimal(EntityType.DONKEY, 15, 200));
+            animals.add(new NonNativeAnimal(EntityType.DONKEY, 15, 15, 200));
             //animals.add(new NonNativeAnimal(EntityType.PIG, 5, 400));
 
 
@@ -79,12 +79,6 @@ public class CustomsOfficeData {
             for (NonNativeAnimal nonNativeAnimal : animals) {
                 if (!typesSet.contains(nonNativeAnimal.getType())) {
                     typesSet.add(nonNativeAnimal.getType());
-                    for (PurchaseOrder order : purchaseOrders) {
-                        // TODO REMOVE IF REMOVING TRANSIENT
-                        if (order.getType() == nonNativeAnimal.getType()) {
-                            nonNativeAnimal.setRemainingQuantity(nonNativeAnimal.getRemainingQuantity() - 1);
-                        }
-                    }
                     nonNativeAnimals.add(nonNativeAnimal);
                 }
             }
@@ -96,6 +90,7 @@ public class CustomsOfficeData {
         // TODO load worldguard
         // TODO food person
         // TODO amounts?
+        // TODO hook into vault
     }
 
     public void save() {

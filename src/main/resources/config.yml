@@ -1,5 +1,6 @@
 # Customs Office configuration file
 
+# Citizens NPC ID (not UUID) that when clicked, opens the Customs Office gui
 npc-id: ""
+# Time in seconds when the non-native animals spawn in their respective world guard regions
 time-between-restock: 3000
-max-total-animals: 15
