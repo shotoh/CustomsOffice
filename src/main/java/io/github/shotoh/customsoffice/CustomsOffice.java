@@ -97,7 +97,7 @@ public class CustomsOffice extends JavaPlugin {
             ProtectedRegion region = customsOfficeData.getRegionHashMap().get(order.getType());
             if (region != null) {
                 Location loc = Utils.getRandomLocation(BukkitAdapter.adapt(world, region.getMinimumPoint()), BukkitAdapter.adapt(world, region.getMaximumPoint()));
-                loc = loc.toHighestLocation(HeightMap.WORLD_SURFACE);
+                loc.setY(region.getMinimumPoint().getY());
                 Entity entity = world.spawnEntity(loc, order.getType(), true);
                 PersistentDataContainer con = entity.getPersistentDataContainer();
                 con.set(customsOfficeKeys.getOwnerKey(), PersistentDataType.STRING, order.getPlayerUUID().toString());
