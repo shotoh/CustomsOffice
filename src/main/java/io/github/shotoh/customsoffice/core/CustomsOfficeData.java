@@ -2,12 +2,9 @@ package io.github.shotoh.customsoffice.core;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.sk89q.worldedit.world.World;
-import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import io.github.shotoh.customsoffice.CustomsOffice;
 import net.citizensnpcs.api.npc.NPC;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
 
 import java.io.File;
@@ -23,7 +20,7 @@ public class CustomsOfficeData {
     private ArrayList<NonNativeAnimal> nonNativeAnimals;
     private ArrayList<PurchaseOrder> purchaseOrders;
     private NPC animalNPC;
-    private HashMap<ProtectedRegion, EntityType> regionHashMap;
+    private HashMap<EntityType, ProtectedRegion> regionHashMap;
 
     public CustomsOfficeData(CustomsOffice plugin) {
         this.plugin = plugin;
@@ -57,11 +54,11 @@ public class CustomsOfficeData {
         this.animalNPC = animalNPC;
     }
 
-    public HashMap<ProtectedRegion, EntityType> getRegionHashMap() {
+    public HashMap<EntityType, ProtectedRegion> getRegionHashMap() {
         return regionHashMap;
     }
 
-    public void setRegionHashMap(HashMap<ProtectedRegion, EntityType> regionHashMap) {
+    public void setRegionHashMap(HashMap<EntityType, ProtectedRegion> regionHashMap) {
         this.regionHashMap = regionHashMap;
     }
 
@@ -92,21 +89,22 @@ public class CustomsOfficeData {
             HashSet<EntityType> typesSet = new HashSet<>();
             for (NonNativeAnimal nonNativeAnimal : animals) {
                 if (!typesSet.contains(nonNativeAnimal.getType())) {
-                    typesSet.add(nonNativeAnimal.getType());
-                    nonNativeAnimals.add(nonNativeAnimal);
+                    if (nonNativeAnimal.getType() != null) {
+                        typesSet.add(nonNativeAnimal.getType());
+                        nonNativeAnimals.add(nonNativeAnimal);
+                    }
                 }
             }
             plugin.getLogger().info(nonNativeAnimals.size() + " non native animals loaded!");
-            //
-            WorldGuard.getInstance().getPlatform().getRegionContainer().get((World) Bukkit.getWorlds().get(0));
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
         // TODO close all guis when event happened
+        // take away money
         // TODO food person
-        // TODO amounts?
-        // TODO hook into vault
-        // commands
+        // entity right click event
     }
 
     public void save() {

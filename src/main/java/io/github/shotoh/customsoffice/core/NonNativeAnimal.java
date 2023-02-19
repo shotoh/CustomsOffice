@@ -76,7 +76,13 @@ public class NonNativeAnimal {
                 "<red>Out of stock"
             };
         }
-        return ItemUtils.createMenuItem(plugin, null, StringUtils.capitalize(type.toString().toLowerCase(Locale.ROOT)), lore, Material.valueOf(type + "_SPAWN_EGG"));
+        Material material;
+        if (type == EntityType.MUSHROOM_COW) {
+            material = Material.MOOSHROOM_SPAWN_EGG;
+        } else {
+            material = Material.valueOf(type + "_SPAWN_EGG");
+        }
+        return ItemUtils.createMenuItem(plugin, null, type.toString(), lore, material);
     }
 
     public int getCost() {

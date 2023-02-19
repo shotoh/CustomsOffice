@@ -20,6 +20,7 @@ repositories {
     mavenCentral()
     maven("https://maven.citizensnpcs.co/repo")
     maven("https://maven.enginehub.org/repo")
+    maven("https://repo.rpkit.com/repository/maven-releases")
 }
 
 dependencies {
@@ -29,6 +30,8 @@ dependencies {
         exclude("*", "*")
     }
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.8-SNAPSHOT")
+    implementation("com.rpkit:rpk-core-bukkit:2.4.1")
+    implementation("com.rpkit:rpk-economy-bukkit:2.4.1")
 }
 
 tasks {
@@ -62,7 +65,7 @@ tasks {
 
 // Configure plugin.yml generation
 bukkit {
-    load = BukkitPluginDescription.PluginLoadOrder.STARTUP
+    load = BukkitPluginDescription.PluginLoadOrder.POSTWORLD
     main = "io.github.shotoh.customsoffice.CustomsOffice"
     apiVersion = "1.19"
     authors = listOf("shotoh")
@@ -71,5 +74,5 @@ bukkit {
             description = "Main command for Customs Office"
         }
     }
-    depend = listOf("Citizens", "WorldGuard")
+    depend = listOf("Citizens", "WorldGuard", "rpk-economy-bukkit")
 }
