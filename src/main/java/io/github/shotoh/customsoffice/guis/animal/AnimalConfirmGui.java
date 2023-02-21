@@ -1,5 +1,13 @@
 package io.github.shotoh.customsoffice.guis.animal;
 
+import com.rpkit.characters.bukkit.character.RPKCharacter;
+import com.rpkit.characters.bukkit.character.RPKCharacterService;
+import com.rpkit.core.service.Services;
+import com.rpkit.economy.bukkit.currency.RPKCurrency;
+import com.rpkit.economy.bukkit.currency.RPKCurrencyName;
+import com.rpkit.economy.bukkit.currency.RPKCurrencyService;
+import com.rpkit.economy.bukkit.economy.RPKEconomyService;
+import com.rpkit.players.bukkit.profile.minecraft.RPKMinecraftProfileService;
 import io.github.shotoh.customsoffice.CustomsOffice;
 import io.github.shotoh.customsoffice.core.NonNativeAnimal;
 import io.github.shotoh.customsoffice.core.PurchaseOrder;
@@ -60,9 +68,21 @@ public class AnimalConfirmGui extends CustomsOfficeGui {
                         public void run() {
                             player.closeInventory();
                             if (nonNativeAnimal.getRemainingQuantity() > 0) {
-                                plugin.getCustomsOfficeData().getPurchaseOrders().add(new PurchaseOrder(player.getUniqueId(), nonNativeAnimal.getType(), nonNativeAnimal.getCost()));
-                                nonNativeAnimal.setRemainingQuantity(nonNativeAnimal.getRemainingQuantity() - 1);
-                                Utils.playSound(player, "entity.player.levelup", 1f, 1f);
+                                RPKMinecraftProfileService minecraftProfileService = Services.INSTANCE.get(RPKMinecraftProfileService.class);
+                                RPKCharacterService characterService = Services.INSTANCE.get(RPKCharacterService.class);
+                                RPKCurrencyService currencyService = Services.INSTANCE.get(RPKCurrencyService.class);
+                                RPKEconomyService economyService = Services.INSTANCE.get(RPKEconomyService.class);
+                                RPKCurrency currency = currencyService.getCurrency(new RPKCurrencyName(nonNativeAnimal.getCurrencyName()));
+                                if (currency != null) {
+                                    RPKCharacter character = characterService.getPreloadedActiveCharacter(minecraftProfileService.getPreloadedMinecraftProfile(player));
+                                    int amount = economyService.getPreloadedBalance(character, currency);
+                                    if (amount >= nonNativeAnimal.getCost()) {
+                                        plugin.getCustomsOfficeData().getPurchaseOrders().add(new PurchaseOrder(player.getUniqueId(), nonNativeAnimal.getType(), nonNativeAnimal.getCost(), currency.getName().component1()));
+                                        economyService.setBalance(character, currency, amount - nonNativeAnimal.getCost());
+                                        nonNativeAnimal.setRemainingQuantity(nonNativeAnimal.getRemainingQuantity() - 1);
+                                        Utils.playSound(player, "entity.player.levelup", 1f, 1f);
+                                    }
+                                }
                             } else {
                                 player.sendMessage(plugin.getMiniMessage().deserialize("<red>An error has occurred and the transaction could not be made!"));
                             }

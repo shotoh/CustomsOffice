@@ -2,6 +2,10 @@ package io.github.shotoh.customsoffice.core;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.rpkit.core.service.Services;
+import com.rpkit.economy.bukkit.currency.RPKCurrency;
+import com.rpkit.economy.bukkit.currency.RPKCurrencyName;
+import com.rpkit.economy.bukkit.currency.RPKCurrencyService;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import io.github.shotoh.customsoffice.CustomsOffice;
 import net.citizensnpcs.api.npc.NPC;
@@ -69,8 +73,19 @@ public class CustomsOfficeData {
             FileReader orderReader = new FileReader(getFile("orders.json"));
             ArrayList<PurchaseOrder> orders = gson.fromJson(orderReader, new TypeToken<ArrayList<PurchaseOrder>>(){}.getType());
             orderReader.close();
-            if (orders != null) {
-                purchaseOrders.addAll(orders);
+            if (orders == null) {
+                orders = new ArrayList<>();
+            }
+            for (PurchaseOrder order : orders) {
+                if (order.getCurrencyName() != null) {
+                    RPKCurrencyService currencyService = Services.INSTANCE.get(RPKCurrencyService.class);
+                    RPKCurrency currency = currencyService.getCurrency(new RPKCurrencyName(order.getCurrencyName()));
+                    if (currency != null) {
+                        purchaseOrders.add(order);
+                    } else {
+                        plugin.getLogger().warning("Currency name " + order.getCurrencyName() + " is invalid");
+                    }
+                }
             }
             plugin.getLogger().info(purchaseOrders.size() + " purchase orders loaded!");
             // animals
@@ -80,19 +95,27 @@ public class CustomsOfficeData {
             if (animals == null) {
                 animals = new ArrayList<>();
             }
-
-
-            animals.add(new NonNativeAnimal(EntityType.DONKEY, 15, 15, 200));
-            //animals.add(new NonNativeAnimal(EntityType.PIG, 5, 400));
-
-
             HashSet<EntityType> typesSet = new HashSet<>();
             for (NonNativeAnimal nonNativeAnimal : animals) {
-                if (!typesSet.contains(nonNativeAnimal.getType())) {
-                    if (nonNativeAnimal.getType() != null) {
-                        typesSet.add(nonNativeAnimal.getType());
-                        nonNativeAnimals.add(nonNativeAnimal);
+                if (nonNativeAnimal.getType() != null) {
+                    if (!typesSet.contains(nonNativeAnimal.getType())) {
+                        if (nonNativeAnimal.getCurrencyName() != null) {
+                            RPKCurrencyService currencyService = Services.INSTANCE.get(RPKCurrencyService.class);
+                            RPKCurrency currency = currencyService.getCurrency(new RPKCurrencyName(nonNativeAnimal.getCurrencyName()));
+                            if (currency != null) {
+                                typesSet.add(nonNativeAnimal.getType());
+                                nonNativeAnimals.add(nonNativeAnimal);
+                            } else {
+                                plugin.getLogger().warning("Currency name " + nonNativeAnimal.getCurrencyName() + " is invalid");
+                            }
+                        } else {
+                            plugin.getLogger().warning("Currency name not found for type " + nonNativeAnimal.getType());
+                        }
+                    } else {
+                        plugin.getLogger().warning("Duplicate entries found for type " + nonNativeAnimal.getType());
                     }
+                } else {
+                    plugin.getLogger().warning("Found an invalid non native animal entry, please check the animals.json file");
                 }
             }
             plugin.getLogger().info(nonNativeAnimals.size() + " non native animals loaded!");
@@ -101,10 +124,6 @@ public class CustomsOfficeData {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        // TODO close all guis when event happened
-        // take away money
-        // TODO food person
-        // entity right click event
     }
 
     public void save() {

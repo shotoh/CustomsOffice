@@ -1,5 +1,13 @@
 package io.github.shotoh.customsoffice.guis.animal;
 
+import com.rpkit.characters.bukkit.character.RPKCharacter;
+import com.rpkit.characters.bukkit.character.RPKCharacterService;
+import com.rpkit.core.service.Services;
+import com.rpkit.economy.bukkit.currency.RPKCurrency;
+import com.rpkit.economy.bukkit.currency.RPKCurrencyName;
+import com.rpkit.economy.bukkit.currency.RPKCurrencyService;
+import com.rpkit.economy.bukkit.economy.RPKEconomyService;
+import com.rpkit.players.bukkit.profile.minecraft.RPKMinecraftProfileService;
 import io.github.shotoh.customsoffice.CustomsOffice;
 import io.github.shotoh.customsoffice.core.NonNativeAnimal;
 import io.github.shotoh.customsoffice.core.PurchaseOrder;
@@ -97,7 +105,17 @@ public class AnimalManageGui extends CustomsOfficeGui {
                                     player.openInventory(new AnimalManageGui(plugin, player, list, page).getInventory());
                                     for (NonNativeAnimal nonNativeAnimal : plugin.getCustomsOfficeData().getNonNativeAnimals()) {
                                         if (nonNativeAnimal.getType() == order.getType()) {
-                                            nonNativeAnimal.setRemainingQuantity(nonNativeAnimal.getRemainingQuantity() + 1);
+                                            RPKMinecraftProfileService minecraftProfileService = Services.INSTANCE.get(RPKMinecraftProfileService.class);
+                                            RPKCharacterService characterService = Services.INSTANCE.get(RPKCharacterService.class);
+                                            RPKCurrencyService currencyService = Services.INSTANCE.get(RPKCurrencyService.class);
+                                            RPKEconomyService economyService = Services.INSTANCE.get(RPKEconomyService.class);
+                                            RPKCurrency currency = currencyService.getCurrency(new RPKCurrencyName(order.getCurrencyName()));
+                                            if (currency != null) {
+                                                RPKCharacter character = characterService.getPreloadedActiveCharacter(minecraftProfileService.getPreloadedMinecraftProfile(player));
+                                                int amount = economyService.getPreloadedBalance(character, currency);
+                                                economyService.setBalance(character, currency, amount + order.getCost());
+                                                nonNativeAnimal.setRemainingQuantity(nonNativeAnimal.getRemainingQuantity() + 1);
+                                            }
                                         }
                                     }
                                     Utils.playSound(player, "entity.generic.explode", 1f, 2f);

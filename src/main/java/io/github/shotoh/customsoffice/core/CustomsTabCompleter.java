@@ -25,6 +25,7 @@ public class CustomsTabCompleter implements TabCompleter {
                 list.add("event");
                 list.add("confirm");
                 list.add("region");
+                list.add("when");
             }
         }
         return list;

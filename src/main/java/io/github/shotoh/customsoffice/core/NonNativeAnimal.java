@@ -2,12 +2,9 @@ package io.github.shotoh.customsoffice.core;
 
 import io.github.shotoh.customsoffice.CustomsOffice;
 import io.github.shotoh.customsoffice.utils.ItemUtils;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.Locale;
 
 public class NonNativeAnimal {
     private EntityType type;
@@ -15,6 +12,7 @@ public class NonNativeAnimal {
     private int remainingQuantity;
     private double multiplier;
     private String regionID;
+    private String currencyName;
 
     public NonNativeAnimal(EntityType type, int maxAmount, int remainingQuantity, double multiplier) {
         this.type = type;
@@ -22,6 +20,7 @@ public class NonNativeAnimal {
         this.remainingQuantity = remainingQuantity;
         this.multiplier = multiplier;
         this.regionID = null;
+        this.currencyName = null;
     }
 
     public EntityType getType() {
@@ -64,12 +63,20 @@ public class NonNativeAnimal {
         this.regionID = regionID;
     }
 
+    public String getCurrencyName() {
+        return currencyName;
+    }
+
+    public void setCurrencyName(String currencyName) {
+        this.currencyName = currencyName;
+    }
+
     public ItemStack getSpawnEgg(CustomsOffice plugin) {
         String[] lore;
         if (remainingQuantity > 0) {
             lore = new String[] {
                 remainingQuantity + " left in stock",
-                "<gold>Cost: " + getCost()
+                "<gold>Cost: " + getCost() + " " + currencyName
             };
         } else {
             lore = new String[] {

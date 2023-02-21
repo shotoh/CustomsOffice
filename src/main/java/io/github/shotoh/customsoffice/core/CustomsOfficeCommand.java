@@ -12,6 +12,9 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class CustomsOfficeCommand implements CommandExecutor {
     private CustomsOffice plugin;
 
@@ -70,6 +73,10 @@ public class CustomsOfficeCommand implements CommandExecutor {
                         } else {
                             Utils.sendMessage(sender, "<red>Invalid amount of arguments");
                         }
+                        break;
+                    case "when":
+                        confirm = false;
+                        Utils.sendMessage(sender, "<aqua>The next animal event will happen on: " + new SimpleDateFormat().format(new Date(plugin.getConfig().getLong("animal-event-time"))));
                         break;
                 }
             }

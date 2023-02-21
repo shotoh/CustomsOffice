@@ -93,5 +93,6 @@ public class CitizensListener implements Listener {
                 }.runTaskLater(plugin, nextEventTimeTicks));
             }
         }
+        plugin.saveConfig();
     }
 }

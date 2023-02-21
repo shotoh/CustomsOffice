@@ -14,11 +14,13 @@ public class PurchaseOrder {
     private UUID playerUUID;
     private EntityType type;
     private int cost;
+    private String currencyName;
 
-    public PurchaseOrder(UUID playerUUID, EntityType type, int cost) {
+    public PurchaseOrder(UUID playerUUID, EntityType type, int cost, String currencyName) {
         this.playerUUID = playerUUID;
         this.type = type;
         this.cost = cost;
+        this.currencyName = currencyName;
     }
 
     public UUID getPlayerUUID() {
@@ -45,9 +47,17 @@ public class PurchaseOrder {
         this.cost = cost;
     }
 
+    public String getCurrencyName() {
+        return currencyName;
+    }
+
+    public void setCurrencyName(String currencyName) {
+        this.currencyName = currencyName;
+    }
+
     public ItemStack getOrderDetails(CustomsOffice plugin) {
         return ItemUtils.createMenuItem(plugin, null, "Order: " + type, new String[] {
-            "<gold>Cost: " + cost,
+            "<gold>Cost: " + cost + " " + currencyName,
             "<red>Click to remove order"
         }, Material.PAPER);
     }

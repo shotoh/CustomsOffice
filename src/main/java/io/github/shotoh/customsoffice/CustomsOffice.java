@@ -110,7 +110,12 @@ public class CustomsOffice extends JavaPlugin {
         }
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (player.getOpenInventory().getTopInventory().getHolder() instanceof CustomsOfficeGui) {
-                player.closeInventory();
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        player.closeInventory();
+                    }
+                }.runTaskLater(this, 1);
             }
         }
         long nextEventTimeTicks = (newEventTime - System.currentTimeMillis()) / 1000 * 20;

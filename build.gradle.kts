@@ -30,8 +30,11 @@ dependencies {
         exclude("*", "*")
     }
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.8-SNAPSHOT")
-    implementation("com.rpkit:rpk-core-bukkit:2.4.1")
-    implementation("com.rpkit:rpk-economy-bukkit:2.4.1")
+    implementation("com.rpkit:rpk-core-bukkit:2.4.1:all")
+    implementation("com.rpkit:rpk-player-lib-bukkit:2.4.1:all")
+    implementation("com.rpkit:rpk-character-lib-bukkit:2.4.1:all")
+    implementation("com.rpkit:rpk-economy-lib-bukkit:2.4.1:all")
+    implementation("com.rpkit:rpk-economy-bukkit:2.4.1:all")
 }
 
 tasks {
